@@ -8,13 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
-        uses: actions/checkout@v3
-      - name: validate gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
-      - name: setup jdk
-        uses: actions/setup-java@v3
+        uses: actions/checkout@v6
+      - name: setup gradle
+        uses: gradle/actions/setup-gradle@v5
         with:
-          java-version: 17
+          validate-wrappers: true
+          dependency-graph: generate-and-submit
+          build-scan-publish: false
+      - name: setup jdk
+        uses: actions/setup-java@v5
+        with:
+          java-version: 25
           distribution: 'temurin'
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew

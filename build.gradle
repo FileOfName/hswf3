@@ -1,6 +1,6 @@
 plugins {
-	id 'fabric-loom' version '1.3-SNAPSHOT'
-	id "com.modrinth.minotaur" version "2.+"
+	alias(libs.plugins.fabric.loom)
+	alias(libs.plugins.minotaur)
 }
 
 dependencies {
@@ -19,18 +19,22 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+	it.options.release = 21
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/hswf3.accesswidener")
+	decompilers {
+        vineflower {
+
+        }
+    }
 }
 
 java {
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
@@ -49,12 +53,12 @@ jar {
 modrinth {
 	token = System.getenv("MODRINTH_TOKEN")
 	projectId = "hswf3"
-	versionType = findProperty("versionType")?.allWhitespace ? DEFAULT_VERSION_TYPE : findProperty("versionType")
-	changelog = findProperty("changelog")?.allWhitespace ? DEFAULT_CHANGELOG : findProperty("changelog")
+	versionType = findProperty("versionType") ?: DEFAULT_VERSION_TYPE
+	changelog = findProperty("changelog") ?: DEFAULT_CHANGELOG
 	uploadFile = remapJar
 	syncBodyFrom = rootProject.file("README.md").text
 	loaders = ["fabric", "quilt"]
-	debugMode = findProperty("modrinthDebug")?.allWhitespace ? false : findProperty("modrinthDebug")?.toBoolean()
+	debugMode = findProperty("modrinthDebug")?.toBoolean() ?: true
 }
 
 tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
