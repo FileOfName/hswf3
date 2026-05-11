@@ -62,7 +62,7 @@ modrinth {
 	uploadFile = jar
 	syncBodyFrom = rootProject.file("README.md").text
 	loaders = ["fabric", "quilt"]
-	debugMode = findProperty("modrinthDebug")?.toBoolean() ?: true
+	debugMode = !findProperty("modrinthRelease")?.toBoolean()
 }
 
 tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
