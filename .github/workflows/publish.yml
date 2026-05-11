@@ -23,7 +23,7 @@ jobs:
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       - name: modrinth release
-        run: ./gradlew modrinth -Pchangelog="$(gh release view --json body -q .body)"
+        run: ./gradlew modrinth -Pchangelog="$(gh release view --json body -q .body) -PmodrinthDebug=false"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
